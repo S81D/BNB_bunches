@@ -19,18 +19,33 @@ import matplotlib.ticker as ticker
 from tqdm import trange
 from tqdm import tqdm
 
+# --------------------------------------------------------- #
 
+# plot title label
 id_names = ["NCQE"]
+
+# save path for plots
 SavePath = 'plots/NCQE/NCQE_2023/15_hits/'
+
+# directory for root files
 directory = '2023_prestine/'
 
-#total_POT = r'$0.498 \times 10^{20}$ POT'   # usable 2024 data (4763-4809)
-#total_POT = r'$0.286 \times 10^{20}$ POT'    # usable 2022 data
-#total_POT = r'$0.879 \times 10^{20}$ POT'   # 2023 usable data + 4111
+# total POT label
 total_POT = r'$0.862 \times 10^{20}$ POT'   # 2023 usable data
+
+# depending on which event class, you likely will need to adjust:
+# line ~530:      (some numbers between 0 and 20 ns)
+#                   fitStart = ...
+#                   fitEnd = ...
+
+# --------------------------------------------------------- #
+
 
 def extract_run_number(file_name):
     return int(file_name.split('_')[0][1:])
+
+
+# Event selection:
 
 # throughgoing muons
 def throughgoing(T1,TMRD1,NV1,B1,CPE1,CCB1,hitZ,hitPE):
@@ -68,23 +83,6 @@ def CC_inc(T1,TMRD1,NV1,B1,CN1,CPE1):
     if(CPE1<200 or CPE1>5000):  # 200 < cluster PE < 5000
         return False
     return True
-
-'''
-# dirt muons
-def dirt(TMRD1,NV1,B1,CPE1,CCB1):
-    if(TMRD1==1): # TankMRDCoinc
-        return False
-    if(NV1==1):   # NoVeto
-        return False
-    if(B1==0):    # Brightest
-        return False
-    if(CPE1<2000 or CPE1>6000):  # 2000 < cluster PE < 6000
-        return False
-    if(CCB1>0.2 or CCB1<0): # Cluster Charge Balance < 0.2
-        return False
-    # Waiting for the cluster hits to do the charge barycenter cut
-    return True
-'''
 
 # NC events
 def NC(TMRD1,NV1,NOC1,CN1,CPE1,CH1,CCB1,MRD_yes,FMV_yes):
@@ -204,9 +202,6 @@ bunch_start = float(input("First bunch peak time?   "))
 
 # Close the plot and continue with the script
 plt.close('all')
-
-
-#bunch_start = 230
 
 # Continue with the rest of your script
 print(f"You entered: {bunch_start}", '\n')
@@ -541,6 +536,8 @@ print('Superimposing all bunches...\n')
 
 bins = 40
 ranges = (0, 20)
+
+# may need to be modified depending on events
 fitStart = 2
 fitEnd = 17
 
